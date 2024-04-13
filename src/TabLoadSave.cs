@@ -113,7 +113,7 @@ namespace PrepareLanding
                 richText = true
             };
 
-            // setup default name 
+            // setup default name
             // TODO check if possible to get logged in user if non steam rimworld
             _presetAuthorSave = SteamManager.Initialized ? SteamUtility.SteamPersonaName : "Your_Name";
 
@@ -457,8 +457,7 @@ namespace PrepareLanding
 
             ListingStandard.Label("PLMWLODSAV_PresetDescription".Translate());
             var descriptionRect = ListingStandard.GetRect(80f);
-            Widgets.TextAreaScrollable(descriptionRect, preset.PresetInfo.Description,
-                ref _scrollPosPresetLoadDescription);
+            Widgets.TextArea(descriptionRect, preset.PresetInfo.Description);
 
             ListingStandard.Label("PLMWLODSAV_PresetFilters".Translate());
             const float maxOuterRectHeight = 130f;
@@ -537,8 +536,7 @@ namespace PrepareLanding
             DrawEntryHeader(string.Format("PLMWLODSAV_DescriptionString".Translate(), MaxDescriptionLength));
 
             var descriptionRect = ListingStandard.GetRect(80f);
-            _presetDescriptionSave = Widgets.TextAreaScrollable(descriptionRect, _presetDescriptionSave,
-                ref _scrollPosPresetDescription);
+            _presetDescriptionSave = Widgets.TextArea(descriptionRect, _presetDescriptionSave);
             if (_presetDescriptionSave.Length >= MaxDescriptionLength)
                 _presetDescriptionSave = _presetDescriptionSave.Substring(0, MaxDescriptionLength);
         }
