@@ -14,7 +14,7 @@ namespace PrepareLanding.Patches
         {
             // Log.Message("[PrepareLanding] WorldUpdate postfix.");
 
-            if (Input.GetKeyDown(PrepareLanding.Instance.GameOptions.PrepareLandingHotKey.Value))
+            if (Input.GetKeyDown(PrepareLanding.Instance.GameOptions.PrepareLandingHotKey))
             {
                 Log.Message("[PrepareLanding] Shortcut key pressed.");
 

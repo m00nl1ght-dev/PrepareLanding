@@ -13,7 +13,7 @@ namespace PrepareLanding.Patches
         static bool Page_CreateWorldParams_CanDoNext(ref Page_CreateWorldParams __instance, ref bool __result)
         {
             // don't use Precise World Generation if the settings tells to do so.
-            if (PrepareLanding.Instance.GameOptions.DisablePreciseWorldGenPercentage.Value) {
+            if (PrepareLanding.Instance.GameOptions.DisablePreciseWorldGenPercentage) {
                 Log.Message("[PrepareLanding] Precise World Generation - skipping due to mod settings.");
                 return true;
             }

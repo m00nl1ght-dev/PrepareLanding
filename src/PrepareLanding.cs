@@ -1,7 +1,8 @@
-﻿using HugsLib;
+﻿using HarmonyLib;
 using PrepareLanding.Core;
 using PrepareLanding.Core.Gui.World;
 using PrepareLanding.Presets;
+using UnityEngine;
 using Verse;
 
 namespace PrepareLanding
@@ -10,14 +11,13 @@ namespace PrepareLanding
     ///     Main Mod class.
     /// </summary>
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class PrepareLanding : ModBase
+    public class PrepareLanding : Mod
     {
         /// <summary>
         ///     Main mod class constructor. Sets up the static instance.
         /// </summary>
-        public PrepareLanding()
+        public PrepareLanding(ModContentPack mcp) : base(mcp)
         {
-            Logger.Message("Enter constructor.");
             if (Instance == null)
                 Instance = this;
 
@@ -25,7 +25,7 @@ namespace PrepareLanding
             EventHandler = new RimWorldEventHandler();
 
             // global game options
-            GameOptions = new GameOptions(Settings, EventHandler);
+            GameOptions = GetSettings<GameOptions>();
 
             // instance used to keep track of (or override) game ticks.
             GameTicks = new GameTicks();
@@ -40,7 +40,8 @@ namespace PrepareLanding
             // instantiate the tile highlighter
             TileHighlighter = new TileHighlighter(filterOptions);
 
-            Logger.Message("Exit constructor.");
+            var harmony = new Harmony("com.neitsa.preparelanding");
+            harmony.PatchAll(typeof(PrepareLanding).Assembly);
         }
 
         /// <summary>
@@ -76,13 +77,10 @@ namespace PrepareLanding
         /// </summary>
         public MainWindow MainWindow { get; set; }
 
-        /// <inheritdoc />
-        public override string ModIdentifier => "PrepareLanding";
-
         /// <summary>
         ///     The full path of the mod folder.
         /// </summary>
-        public string ModFolder => ModContentPack.RootDir;
+        public string ModFolder => Content.RootDir;
 
         /// <summary>
         ///      Instance used to control all useful events from RimWorld.
@@ -97,41 +95,27 @@ namespace PrepareLanding
             Instance = null;
         }
 
-        /// <inheritdoc />
-        /// <summary>
-        ///     Called during mod initialization.
-        /// </summary>
-        public override void Initialize()
+        internal void Initialize()
         {
-            Logger.Message("Initializing.");
+            // alert subscribers that definitions have been loaded.
+            EventHandler.OnDefsLoaded();
 
             var presetManager = new PresetManager(GameData);
             GameData.PresetManager = presetManager;
         }
 
-        /// <inheritdoc />
-        public override void DefsLoaded()
+        internal void WorldLoaded()
         {
-            // do not go further if this mod is not active. This will mostly prevent all other classes from running.
-            if (!ModIsActive)
-            {
-                Log.Message("[PrepareLanding] DefsLoaded: Mod is not active, bailing out.");
-                return;
-            }
-
-            // alert subscribers that definitions have been loaded.
-            EventHandler.OnDefsLoaded();
-        }
-
-        /// <inheritdoc />
-        public override void WorldLoaded()
-        {
-            if (!ModIsActive)
-                return;
-
             Log.Message("[PrepareLanding] WorldLoaded (from save).");
 
             EventHandler.OnWorldLoaded();
         }
+
+        public override void DoSettingsWindowContents(Rect rect)
+        {
+            GameOptions.DoSettingsWindowContents(rect);
+        }
+
+        public override string SettingsCategory() => "Prepare Landing";
     }
 }

@@ -36,9 +36,7 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>packages\Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="HugsLib">
-      <HintPath>packages\UnlimitedHugs.Rimworld.HugsLib.10.0.1\lib\net472\HugsLib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -129,6 +127,7 @@
     <Compile Include="src\Overlays\WorldLayerTemperature.cs" />
     <Compile Include="src\Patches\PagePreciseWorldGeneration.cs" />
     <Compile Include="src\Patches\PatchCreateWorldParams.cs" />
+    <Compile Include="src\Patches\PatchGameFinalizeInit.cs" />
     <Compile Include="src\Patches\PatchGenerateGridIntoWorld.cs" />
     <Compile Include="src\Patches\PatchGenerateWorld.cs" />
     <Compile Include="src\Patches\PatchNaturalRockTypesIn.cs" />
@@ -140,6 +139,7 @@
     <Compile Include="src\Presets\PresetInfo.cs" />
     <Compile Include="src\Presets\PresetManager.cs" />
     <Compile Include="src\RimWorldEventHandler.cs" />
+    <Compile Include="src\StaticInitializer.cs" />
     <Compile Include="src\TabFilteredTiles.cs" />
     <Compile Include="src\TabGodMode.cs" />
     <Compile Include="src\TabInfo.cs" />

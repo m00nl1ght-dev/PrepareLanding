@@ -1,45 +1,36 @@
-﻿using HugsLib.Settings;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace PrepareLanding
 {
-    public class GameOptions
+    public class GameOptions : ModSettings
     {
-        private readonly ModSettingsPack _settingsPack;
+        public bool DisableWorldData;
 
-        public GameOptions(ModSettingsPack settingsPack, RimWorldEventHandler eventHandler)
+        public bool DisablePreciseWorldGenPercentage = true;
+
+        public KeyCode PrepareLandingHotKey = KeyCode.P;
+
+        public void DoSettingsWindowContents(Rect rect)
         {
-            _settingsPack = settingsPack;
+            var listingStandard = new Listing_Standard();
+            listingStandard.Begin(rect);
 
-            eventHandler.DefsLoaded += OnDefLoaded;
+            listingStandard.CheckboxLabeled("PLGOPT_DisableWorldDataTitle".Translate(), ref DisableWorldData,
+                "PLGOPT_DisableWorldDataDescription".Translate());
+
+            listingStandard.CheckboxLabeled("Disable Precise World Gen. %", ref DisablePreciseWorldGenPercentage,
+                "Disable Precise World Generation Percentage on the Create World parameter page.");
+
+            listingStandard.End();
         }
 
-        private void OnDefLoaded()
+        public override void ExposeData()
         {
-            Log.Message("[PrepareLanding] GameOptions.OnDefLoaded().");
-
-            DisableWorldData = _settingsPack.GetHandle("DisableWorldData", "PLGOPT_DisableWorldDataTitle".Translate(),
-                "PLGOPT_DisableWorldDataDescription".Translate(), false);
-
-            DisablePreciseWorldGenPercentage = _settingsPack.GetHandle("DisablePreciseWorldGenPercentage",
-                "Disable Precise World Gen. %",
-                "Disable Precise World Generation Percentage on the Create World parameter page.", true);
-
-            PrepareLandingHotKey = _settingsPack.GetHandle("HotKey",
-                "PrepareLanding Hotkey",
-                "Hotkey for Prepare Landing Main Window",
-                KeyCode.P, // this gets overriden by the settings.
-                null,
-                "Hotkey_");
-
+            Scribe_Values.Look(ref DisableWorldData, "DisableWorldData");
+            Scribe_Values.Look(ref DisablePreciseWorldGenPercentage, "DisablePreciseWorldGenPercentage", true);
+            Scribe_Values.Look(ref PrepareLandingHotKey, "PrepareLandingHotKey", KeyCode.P);
+            base.ExposeData();
         }
-
-        public SettingHandle<bool> DisableWorldData { get; private set; }
-
-        public SettingHandle<bool> DisablePreciseWorldGenPercentage { get; private set; }
-
-        public SettingHandle<KeyCode> PrepareLandingHotKey { get; private set; }
-
     }
 }

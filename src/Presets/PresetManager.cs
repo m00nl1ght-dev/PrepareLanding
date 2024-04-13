@@ -59,7 +59,7 @@ namespace PrepareLanding.Presets
         /// <summary>
         ///     Name of the preset folder.
         /// </summary>
-        public static string FolderName => PrepareLanding.Instance.ModIdentifier;
+        public static string FolderName => "PrepareLanding";
 
         public static string PresetTemplateFolder => Path.Combine(PrepareLanding.Instance.ModFolder, "Presets");
 
@@ -230,7 +230,7 @@ namespace PrepareLanding.Presets
                         MessageTypeDefOf.RejectInput);
                     return false;
                 }
-            
+
             try
             {
                 // delete file
