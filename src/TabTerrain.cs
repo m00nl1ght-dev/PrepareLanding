@@ -24,7 +24,7 @@ namespace PrepareLanding
 
         // game data
         private readonly GameData.GameData _gameData;
-        // string buffer for "number of stones" selection 
+        // string buffer for "number of stones" selection
         private string _bufferStringNumberOfStones;
 
         // holds the currently selected stone def when reordering them.
@@ -203,7 +203,7 @@ namespace PrepareLanding
             }
 
             var rightLabel = _gameData.UserData.CoastalRotation.Use /*&& _gameData.UserData.CoastalRotation.Selected != Rot4.Invalid*/
-                ? ("HasCoast" + _gameData.UserData.CoastalRotation.Selected).Translate().CapitalizeFirst() 
+                ? ("HasCoast" + _gameData.UserData.CoastalRotation.Selected).Translate().CapitalizeFirst()
                 : "PLMW_None".Translate();
             ListingStandard.LabelDouble($"{"PLMWTT_SelectedCoastRotation".Translate()}:", rightLabel);
 
@@ -306,7 +306,7 @@ namespace PrepareLanding
                 // loop through all known biomes
                 foreach (var foragedFood in foragedFoods)
                 {
-                    Log.Message($"[PL] foragedFood: label: {foragedFood.label}; labelCap: {foragedFood.LabelCap}");
+                    // Log.Message($"[PL] foragedFood: label: {foragedFood.label}; labelCap: {foragedFood.LabelCap}");
 
                     // clicking on the floating menu saves the selected biome
                     actionClick = delegate { _gameData.UserData.ForagedFood = foragedFood; };
@@ -438,7 +438,7 @@ namespace PrepareLanding
 
             var roadDefs = _gameData.DefData.RoadDefs;
             var selectedRoadDefs = _gameData.UserData.SelectedRoadDefs;
-            
+
             /*
              * Buttons
              */

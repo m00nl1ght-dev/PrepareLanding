@@ -12,7 +12,9 @@ namespace PrepareLanding
 
         static MonoController()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] MonoController Initialization");
+            #endif
             var gameObject = new GameObject(GameObjectName);
 
             DontDestroyOnLoad(gameObject);
@@ -31,7 +33,10 @@ namespace PrepareLanding
 
         public virtual void Start()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] MonoController Start");
+            #endif
+
             enabled = false;
             LineRenderer = gameObject.AddComponent<LineRenderer>();
         }
@@ -43,7 +48,9 @@ namespace PrepareLanding
 
             Instance = null;
 
+            #if DEBUG
             Log.Message("[PrepareLanding] MonoController OnDestroy");
+            #endif
         }
     }
 }

@@ -16,7 +16,9 @@ namespace PrepareLanding.Patches
 
             if (Input.GetKeyDown(PrepareLanding.Instance.GameOptions.PrepareLandingHotKey))
             {
+                #if DEBUG
                 Log.Message("[PrepareLanding] Shortcut key pressed.");
+                #endif
 
                 // don't add a new window if the window is already there
                 if (PrepareLanding.Instance.MainWindow == null)
@@ -32,7 +34,10 @@ namespace PrepareLanding.Patches
                 {
                     if (PrepareLanding.Instance.MainWindow != null)
                     {
+                        #if DEBUG
                         Log.Message("[PrepareLanding] Escape: Force closing.");
+                        #endif
+
                         PrepareLanding.Instance.MainWindow.ForceClose();
 
                         // force clearing the filtered tile list. We still keep the filters as is.

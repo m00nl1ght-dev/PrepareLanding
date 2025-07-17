@@ -39,7 +39,10 @@ namespace PrepareLanding.Core.Gui.World
 
         static WorldLayerBehaviour()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] WorldLayerBehaviour Static Initialization");
+            #endif
+
             var gameObject = new GameObject(GameObjectName);
 
             DontDestroyOnLoad(gameObject);
@@ -49,7 +52,9 @@ namespace PrepareLanding.Core.Gui.World
 
         public virtual void Start()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] WorldLayerBehaviour Start");
+            #endif
 
             // do not enable Update();
             // see https://docs.unity3d.com/ScriptReference/Behaviour-enabled.html
@@ -72,7 +77,9 @@ namespace PrepareLanding.Core.Gui.World
 
             Instance = null;
 
+            #if DEBUG
             Log.Message("[PrepareLanding] WorldLayerBehaviour OnDestroy");
+            #endif
         }
     }
 }

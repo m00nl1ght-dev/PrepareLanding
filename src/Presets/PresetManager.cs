@@ -37,8 +37,10 @@ namespace PrepareLanding.Presets
 
             // just make sure the preset dir exists by calling the PresetFolder Property
             Log.Message($"[PrepareLanding] Preset folder is at: {displayPresetFolder}");
+            #if DEBUG
             // location of the preset templates, provided de facto with the mod
             Log.Message($"[PrepareLanding] Preset template folder is at: {displayPresetTemplateFolder}");
+            #endif
 
             CopyFromTemplateFolderToPresetFolder(PresetTemplateFolder, PresetFolder);
 
@@ -307,11 +309,17 @@ namespace PrepareLanding.Presets
                 if (directoryInfo.Exists)
                     return folderPath;
 
+                #if DEBUG
                 Log.Message($"[PrepareLanding] Trying to create mod folder at: '{folderPath}'.");
+                #endif
+
                 try
                 {
                     directoryInfo.Create();
+
+                    #if DEBUG
                     Log.Message($"[PrepareLanding] Successfully created the mod folder at: '{folderPath}'.");
+                    #endif
                 }
                 catch (Exception e)
                 {

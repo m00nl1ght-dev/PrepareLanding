@@ -2,6 +2,7 @@
 using PrepareLanding.Core;
 using PrepareLanding.Core.Gui.World;
 using PrepareLanding.Presets;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -102,11 +103,15 @@ namespace PrepareLanding
 
             var presetManager = new PresetManager(GameData);
             GameData.PresetManager = presetManager;
+
+            PlanetLayerDefOf.Surface.worldDrawLayers.Add(typeof(WorldLayerHighlightedTiles));
         }
 
         internal void WorldLoaded()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] WorldLoaded (from save).");
+            #endif
 
             EventHandler.OnWorldLoaded();
         }

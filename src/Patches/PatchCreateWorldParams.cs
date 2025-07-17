@@ -14,7 +14,9 @@ namespace PrepareLanding.Patches
         {
             // don't use Precise World Generation if the settings tells to do so.
             if (PrepareLanding.Instance.GameOptions.DisablePreciseWorldGenPercentage) {
+                #if DEBUG
                 Log.Message("[PrepareLanding] Precise World Generation - skipping due to mod settings.");
+                #endif
                 return true;
             }
 

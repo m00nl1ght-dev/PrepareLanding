@@ -72,7 +72,9 @@ namespace PrepareLanding
         /// </summary>
         private void OnWorldGenerated()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] OnWorldGenerated");
+            #endif
 
             // note: if we don't use ExecuteWhenFinished() then the world has been generated but the world field (from Find.World) is not yet set and is null.
             // so better use ExecuteWhenFinished as we are inside a LongEventHandler; see RimWorld.Page_CreateWorldParams.CanDoNext()
@@ -88,7 +90,10 @@ namespace PrepareLanding
         /// </summary>
         private void OnWordAboutToBeGenerated()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] OnWordAboutToBeGenerated");
+            #endif
+
             WorldAboutToBeGenerated?.Invoke();
         }
 
@@ -97,7 +102,10 @@ namespace PrepareLanding
         /// </summary>
         public void OnDefsLoaded()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] OnDefsLoaded");
+            #endif
+
             DefsLoaded?.Invoke();
 
             //
@@ -115,14 +123,18 @@ namespace PrepareLanding
             var patches = Harmony.GetPatchInfo(canDoNextOriginalMethod);
             if (patches is null) {
                 // method is not patched!
+                #if DEBUG
                 Log.Message("[PrepareLanding] Manual Patching: Page_CreateWorldParams_CanDoNext");
+                #endif
                 var prefix = typeof(PatchCreateWorldParams).GetMethod("Page_CreateWorldParams_CanDoNext", BindingFlags.NonPublic | BindingFlags.Static);
                 if (prefix is null) {
                     Log.Message("[PrepareLanding] Could not find PatchCreateWorldParams.Page_CreateWorldParams_CanDoNext prefix.");
                     return;
                 }
                 var replacementMethod = harmony.Patch(canDoNextOriginalMethod, new HarmonyMethod(prefix));
+                #if DEBUG
                 Log.Message($"[PrepareLanding] PatchCreateWorldParams.Page_CreateWorldParams_CanDoNext - patch done: {!(replacementMethod is null)}");
+                #endif
             }
             else {
                 // method is patched with a prefix... We can't add our own. Just log and bail out.
@@ -147,7 +159,10 @@ namespace PrepareLanding
         /// </summary>
         public void OnWorldLoaded()
         {
+            #if DEBUG
             Log.Message("[PrepareLanding] OnWorldLoaded");
+            #endif
+
             WorldLoaded?.Invoke();
             WorldGeneratedOrLoaded?.Invoke();
         }
