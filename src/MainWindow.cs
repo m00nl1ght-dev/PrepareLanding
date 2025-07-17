@@ -43,7 +43,7 @@ namespace PrepareLanding
             MinimizedWindow.WindowLabel = optionalTitle;
             MinimizedWindow.AddMinimizedWindowContent += AddMinimizedWindowContent;
 
-            /* 
+            /*
              * GUI utilities (tabs)
              */
             _tabFilteredTiles = new TabFilteredTiles(0.48f);
@@ -98,12 +98,12 @@ namespace PrepareLanding
                     Minimize();
                 });
 
-            var buttonSelectRandomSite = new ButtonDescriptor("PLMWBB_SelectRandom".Translate(), 
+            var buttonSelectRandomSite = new ButtonDescriptor("PLMWBB_SelectRandom".Translate(),
                 delegate
                 {
                     SoundDefOf.Click.PlayOneShotOnCamera();
                     var tileId = PrepareLanding.Instance.TileFilter.RandomFilteredTile();
-                    if (tileId == Tile.Invalid)
+                    if (tileId == PlanetTile.Invalid)
                         return;
 
                     Find.WorldInterface.SelectedTile = tileId;
@@ -187,7 +187,7 @@ namespace PrepareLanding
 
         public override Vector2 InitialSize => new Vector2(1024f, 768f);
 
-        public override bool IsWindowValidInContext => WorldRendererUtility.WorldRenderedNow && (Find.WindowStack.IsOpen<MainWindow>() || Find.WindowStack.IsOpen<MinimizedWindow>());
+        public override bool IsWindowValidInContext => WorldRendererUtility.WorldRendered && (Find.WindowStack.IsOpen<MainWindow>() || Find.WindowStack.IsOpen<MinimizedWindow>());
 
         public override void DoWindowContents(Rect inRect)
         {
@@ -255,7 +255,7 @@ namespace PrepareLanding
             //    otherwise there's no way to get the window back...
             if (Current.ProgramState == ProgramState.Playing)
             {
-                if(_bottomButtonsDescriptorList.Contains(_buttonCloseDescriptor)) 
+                if(_bottomButtonsDescriptorList.Contains(_buttonCloseDescriptor))
                     _bottomButtonsDescriptorList.Remove(_buttonCloseDescriptor);
             }
             else
@@ -286,7 +286,7 @@ namespace PrepareLanding
             Vector2 bottomButtonSize;
             if (UI.screenHeight <= 720)
             {
-                buttonsY = windowRect.height - (SpaceForBottomButtons + 16f); ; // make buttons a little bit higher
+                buttonsY = windowRect.height - (SpaceForBottomButtons + 16f); // make buttons a little bit higher
                 bottomButtonSize = _bottomButtonSizeLowRes; // thinner buttons
             }
             else

@@ -192,7 +192,7 @@ namespace PrepareLanding
                 // get latitude & longitude for the tile
                 var vector = Find.WorldGrid.LongLatOf(selectedTileId);
                 var labelText =
-                    $"{i}: {vector.y.ToStringLatitude()} {vector.x.ToStringLongitude()} - {selectedTile.biome.LabelCap} ; {selectedTileId}";
+                    $"{i}: {vector.y.ToStringLatitude()} {vector.x.ToStringLongitude()} - {selectedTile.PrimaryBiome.LabelCap} ; {selectedTileId}";
 
                 // display the label
                 var labelRect = innerLs.GetRect(DefaultElementHeight);
@@ -225,12 +225,12 @@ namespace PrepareLanding
             var selTileId = matchingTiles[SelectedTileIndex];
             var selTile = Find.World.grid[selTileId];
 
-            ListingStandard.Label(selTile.biome.description);
+            ListingStandard.Label(selTile.PrimaryBiome.description);
             ListingStandard.Gap(8f);
             ListingStandard.GapLine();
-            if (!selTile.biome.implemented)
+            if (!selTile.PrimaryBiome.implemented)
             {
-                ListingStandard.Label(selTile.biome.LabelCap + " " + "BiomeNotImplemented".Translate());
+                ListingStandard.Label(selTile.PrimaryBiome.LabelCap + " " + "BiomeNotImplemented".Translate());
             }
             ListingStandard.LabelDouble("Terrain".Translate(), selTile.hilliness.GetLabelCap());
             if (selTile.Roads != null)
@@ -249,7 +249,7 @@ namespace PrepareLanding
                 const bool perceivedStatic = false;
                 var explanation = stringBuilder;
                 var rightLabel = (WorldPathGrid.CalculatedMovementDifficultyAt(tile, perceivedStatic, null, explanation) * Find.WorldGrid.GetRoadMovementDifficultyMultiplier(selTileId, -1, stringBuilder)).ToString("0.#");
-                if (WorldPathGrid.WillWinterEverAffectMovementDifficulty(selTileId) && WorldPathGrid.GetCurrentWinterMovementDifficultyOffset(selTileId, null) < 2f)
+                if (WorldPathGrid.WillWinterEverAffectMovementDifficulty(selTileId) && WorldPathGrid.GetCurrentWinterMovementDifficultyOffset(selTileId) < 2f)
                 {
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine();
@@ -259,7 +259,7 @@ namespace PrepareLanding
                 }
                 ListingStandard.LabelDouble("MovementDifficulty".Translate(), rightLabel, stringBuilder.ToString());
             }
-            if (selTile.biome.canBuildBase)
+            if (selTile.PrimaryBiome.canBuildBase)
             {
                 ListingStandard.LabelDouble("StoneTypesHere".Translate(), (from rt in Find.World.NaturalRockTypesIn(selTileId)
                                                                             select rt.label).ToCommaList(true).CapitalizeFirst());
@@ -269,9 +269,9 @@ namespace PrepareLanding
             ListingStandard.LabelDouble("AvgTemp".Translate(), GenTemperature.GetAverageTemperatureLabel(selTileId));
             ListingStandard.LabelDouble("OutdoorGrowingPeriod".Translate(), Zone_Growing.GrowingQuadrumsDescription(selTileId));
             ListingStandard.LabelDouble("Rainfall".Translate(), selTile.rainfall.ToString("F0") + "mm");
-            if (selTile.biome.foragedFood != null && selTile.biome.forageability > 0f)
+            if (selTile.PrimaryBiome.foragedFood != null && selTile.PrimaryBiome.forageability > 0f)
             {
-                ListingStandard.LabelDouble("Forageability".Translate(), selTile.biome.forageability.ToStringPercent() + " (" + selTile.biome.foragedFood.label + ")");
+                ListingStandard.LabelDouble("Forageability".Translate(), selTile.PrimaryBiome.forageability.ToStringPercent() + " (" + selTile.PrimaryBiome.foragedFood.label + ")");
             }
             else
             {
@@ -280,7 +280,7 @@ namespace PrepareLanding
             ListingStandard.LabelDouble("AnimalsCanGrazeNow".Translate(), (!VirtualPlantsUtility.EnvironmentAllowsEatingVirtualPlantsNowAt(selTileId)) ? "No".Translate() : "Yes".Translate());
             ListingStandard.GapLine();
             ListingStandard.LabelDouble("AverageDiseaseFrequency".Translate(),
-                $"{(60f / selTile.biome.diseaseMtbDays):F1} {"PerYear".Translate()}");
+                $"{(60f / selTile.PrimaryBiome.diseaseMtbDays):F1} {"PerYear".Translate()}");
             ListingStandard.LabelDouble("TimeZone".Translate(), GenDate.TimeZoneAt(Find.WorldGrid.LongLatOf(selTileId).x).ToStringWithSign());
             var stringBuilder2 = new StringBuilder();
             var rot = Find.World.CoastDirectionAt(selTileId);

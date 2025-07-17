@@ -52,8 +52,7 @@ namespace PrepareLanding.GameData
 
         public Texture2D CharacteristicGradientTexture
         {
-            get => _characteristicGradientTexture ??
-                   (_characteristicGradientTexture = ColorUtils.CreateGradientTexture(_colorGradient));
+            get => _characteristicGradientTexture ??= ColorUtils.CreateGradientTexture(_colorGradient);
 
             private set
             {
@@ -125,7 +124,7 @@ namespace PrepareLanding.GameData
 #endif
             // Can't do the following here on some occasions (i.e Load a save without going to the select landing page).
             // because this would load materials on another thread than the main thread.
-            //GenerateMaterialByBiome(biomeDef); 
+            //GenerateMaterialByBiome(biomeDef);
         }
 
         public void TilesCharacteristicByBiome(BiomeDef biomeDef)

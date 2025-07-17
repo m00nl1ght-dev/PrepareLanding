@@ -15,7 +15,7 @@ namespace PrepareLanding.Core.Extensions
         /// </returns>
         public static int TileId(this Tile tile)
         {
-            return Find.WorldGrid == null ? Tile.Invalid : Find.WorldGrid.tiles.IndexOf(tile);
+            return Find.WorldGrid == null ? PlanetTile.Invalid.tileId : Find.WorldGrid.Surface.Tiles.IndexOf(tile);
         }
     }
 }

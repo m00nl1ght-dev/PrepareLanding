@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using PrepareLanding.Core.Extensions;
@@ -55,7 +54,7 @@ namespace PrepareLanding.Coordinates
             if (_coordsType == CoordinatesType.CoordString)
             {
                 if (!ParseCoordinatesString())
-                    return Tile.Invalid;
+                    return PlanetTile.Invalid;
 
                 CoordinatesVector = VectorFromCoordinates();
             }
@@ -179,10 +178,9 @@ namespace PrepareLanding.Coordinates
 
             // get all tiles that are roughly at the same latitude
             var trimmedCoords = PatchGenerateGridIntoWorld.TileIdsAndVectors.FindAll(kvp =>
-                    kvp.Value.y >= deltaVectorMinus.y && kvp.Value.y <= deltaVectorPlus.y)
-                .ToList();
+                kvp.Value.y >= deltaVectorMinus.y && kvp.Value.y <= deltaVectorPlus.y);
 
-            var foundTile = Tile.Invalid;
+            var foundTile = PlanetTile.Invalid;
             /*
              * very tiny approximation, we round the coordinates vector and try to find the same one
              */
@@ -195,7 +193,7 @@ namespace PrepareLanding.Coordinates
                 foundTile = tileVector.Key;
                 break;
             }
-            if (foundTile != Tile.Invalid)
+            if (foundTile != PlanetTile.Invalid)
                 return foundTile;
 
 
@@ -212,16 +210,16 @@ namespace PrepareLanding.Coordinates
                 vectorMinusDistance = dist;
                 foundTile = tileVector.Key;
             }
-            if (foundTile != Tile.Invalid)
+            if (foundTile != PlanetTile.Invalid)
                 return foundTile;
 
             /*
              * larger approximation by using a range
              */
             vectorMinusDistance = deltaMag;
-            var vectorMinusTile = Tile.Invalid;
+            var vectorMinusTile = PlanetTile.Invalid;
             var vectorPlusDistance = deltaMag;
-            var vectorPlusTile = Tile.Invalid;
+            var vectorPlusTile = PlanetTile.Invalid;
             foreach (var tileVector in trimmedCoords)
             {
                 var deltaMinusDistance = Vector3.Distance(tileVector.Value, deltaVectorMinus);
@@ -260,7 +258,7 @@ namespace PrepareLanding.Coordinates
 
         public static string LongLatOfString(int tileId)
         {
-            if (tileId == Tile.Invalid)
+            if (tileId == PlanetTile.Invalid)
                 return null;
 
             var stringBuilder = new StringBuilder();
@@ -290,13 +288,13 @@ namespace PrepareLanding.Coordinates
             Find.WorldCameraDriver.JumpTo(coords);
             var uiPos = GenWorldUI.WorldToUIPosition(coords);
             var tileId = GenWorld.TileAt(uiPos);
-            if (tileId == Tile.Invalid)
-                return Tile.Invalid;
+            if (tileId == PlanetTile.Invalid)
+                return PlanetTile.Invalid;
 
             // just check that the tile isn't very far from the given coordinates
             var foundTileCoords = Find.WorldGrid.GetTileCenter(tileId);
             var dist = Vector3.Distance(foundTileCoords, coords);
-            return dist < _deltaVectorBig.magnitude ? tileId : Tile.Invalid;
+            return dist < _deltaVectorBig.magnitude ? tileId : PlanetTile.Invalid;
         }
 
         private enum CoordinatesType

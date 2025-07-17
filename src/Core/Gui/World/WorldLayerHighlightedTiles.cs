@@ -7,7 +7,7 @@ using Verse;
 namespace PrepareLanding.Core.Gui.World
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class WorldLayerHighlightedTiles : WorldLayer
+    public class WorldLayerHighlightedTiles : WorldDrawLayer
     {
         private readonly float _blinkTick;
 

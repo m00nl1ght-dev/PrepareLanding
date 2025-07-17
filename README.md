@@ -2,7 +2,7 @@
 PrepareLanding
 ==============
 
-This is an unofficial 1.5 update of the Prepare Landing mod created by neitsa.
+This is an unofficial 1.5 and 1.6 update of the Prepare Landing mod created by neitsa.
 The dependency on HugsLib has also been removed.
 
 Documentation

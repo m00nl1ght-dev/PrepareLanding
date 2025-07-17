@@ -6,7 +6,7 @@ using Verse;
 
 namespace PrepareLanding.Patches
 {
-    [HarmonyPatch(typeof(WorldGenStep_Terrain), "GenerateGridIntoWorld")]
+    [HarmonyPatch(typeof(WorldGenStep_Terrain), nameof(WorldGenStep_Terrain.GenerateFresh))]
     public static class PatchGenerateGridIntoWorld
     {
         public static readonly List<KeyValuePair<int, Vector3>> TileIdsAndVectors =

@@ -25,6 +25,9 @@ output/PrepareLanding/1.4/Assemblies/*.mdb
 output/PrepareLanding/1.5/Assemblies/*.dll
 output/PrepareLanding/1.5/Assemblies/*.pdb
 output/PrepareLanding/1.5/Assemblies/*.mdb
+output/PrepareLanding/1.6/Assemblies/*.dll
+output/PrepareLanding/1.6/Assemblies/*.pdb
+output/PrepareLanding/1.6/Assemblies/*.mdb
 
 # Ignore specific tools (pdb2mdb)
 

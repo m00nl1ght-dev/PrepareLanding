@@ -181,7 +181,7 @@ namespace PrepareLanding.GameData
 
             var tile = Find.World.grid[tileId];
 
-            _biome = tile.biome;
+            _biome = tile.PrimaryBiome;
             _elevation = tile.elevation;
             _hilliness = tile.hilliness;
             _averageTemperature = tile.temperature;
@@ -254,8 +254,8 @@ namespace PrepareLanding.GameData
              */
 
             // biome
-            if (Biome != null && Biome != tile.biome)
-                tile.biome = Biome;
+            if (Biome != null && Biome != tile.PrimaryBiome)
+                tile.PrimaryBiome = Biome;
 
             // temperature
             if (!tile.temperature.PreciseRound(1).IsInEpsilonRange(AverageTemperature, 0.15f))

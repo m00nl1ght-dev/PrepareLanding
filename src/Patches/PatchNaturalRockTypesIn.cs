@@ -9,7 +9,7 @@ namespace PrepareLanding.Patches
     /// <summary>
     /// Patch to be able to replace the natural stone types in a tile.
     /// </summary>
-    [HarmonyPatch(typeof(World), "NaturalRockTypesIn")]
+    // [HarmonyPatch(typeof(World), "NaturalRockTypesIn")] // TODO 1.6
     public static class PatchNaturalRockTypesIn
     {
         /// <summary>

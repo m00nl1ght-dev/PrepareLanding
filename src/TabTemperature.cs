@@ -164,7 +164,7 @@ namespace PrepareLanding
         {
             DrawEntryHeader("PLMWT2T_TemperatureForecast".Translate(), backgroundColor: Color.magenta);
 
-            var tileId = Find.WorldSelector.selectedTile;
+            var tileId = Find.WorldSelector.SelectedTile;
 
             if (!Find.WorldSelector.AnyObjectOrTileSelected || tileId < 0)
             {

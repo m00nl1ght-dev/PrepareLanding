@@ -56,7 +56,7 @@ namespace PrepareLanding.Coordinates
 
         public override Vector2 InitialSize { get; } = new Vector2(300f, 115f);
 
-        public static bool CanBeDisplayed => WorldRendererUtility.WorldRenderedNow;
+        public static bool CanBeDisplayed => WorldRendererUtility.WorldRendered;
 
         public static bool IsInWindowStack => Find.WindowStack.IsOpen<MainWindow>();
 
@@ -127,8 +127,8 @@ namespace PrepareLanding.Coordinates
             var goToTileRect = _listingStandard.GetRect(30f);
             var rects = goToTileRect.SplitBy(_goToTileSplitPct, 5f);
 
-            var selectedTile = Find.WorldSelector.selectedTile;
-            if (selectedTile != Tile.Invalid && selectedTile != _goToTileId)
+            var selectedTile = Find.WorldSelector.SelectedTile;
+            if (selectedTile != PlanetTile.Invalid && selectedTile != _goToTileId)
                 SetGuiFromTile(selectedTile, Find.WorldGrid.GetTileCenter(selectedTile), false);
 
             var maxTileId = Find.WorldGrid.TilesCount - 1;
@@ -137,7 +137,7 @@ namespace PrepareLanding.Coordinates
             if (!Widgets.ButtonText(rects[2], "PLCOORDWIN_GoButton".Translate()))
                 return;
 
-            if (_goToTileId == Tile.Invalid || _goToTileId < 0 || _goToTileId >= Find.WorldGrid.TilesCount)
+            if (_goToTileId == PlanetTile.Invalid || _goToTileId < 0 || _goToTileId >= Find.WorldGrid.TilesCount)
                 Messages.Message(
                     $"[PrepareLanding] {string.Format("PLCOORDWIN_TileIdOutOfRange".Translate(), _goToTileId, Find.WorldGrid.TilesCount)}",
                     MessageTypeDefOf.RejectInput);
@@ -181,11 +181,11 @@ namespace PrepareLanding.Coordinates
 
         private void SetGuiFromTile(int tileId, Vector3 coordinates, bool jumpTo = true)
         {
-            if (tileId != Tile.Invalid)
+            if (tileId != PlanetTile.Invalid)
             {
                 if (jumpTo)
                     Find.WorldCameraDriver.JumpTo(tileId);
-                Find.WorldSelector.selectedTile = tileId;
+                Find.WorldSelector.SelectedTile = tileId;
                 _goToTileId = tileId;
                 _goToTileIdString = tileId.ToString();
                 var vec = Find.WorldGrid.LongLatOf(tileId);
@@ -195,7 +195,7 @@ namespace PrepareLanding.Coordinates
             {
                 if (jumpTo)
                     Find.WorldCameraDriver.JumpTo(coordinates);
-                Find.WorldSelector.selectedTile = Tile.Invalid;
+                Find.WorldSelector.SelectedTile = PlanetTile.Invalid;
                 _goToTileId = tileId;
                 _goToTileIdString = string.Empty;
                 _goToCoordsString = Coordinates.LongLatOfString(coordinates);

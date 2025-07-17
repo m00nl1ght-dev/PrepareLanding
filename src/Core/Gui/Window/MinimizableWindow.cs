@@ -23,7 +23,7 @@ namespace PrepareLanding.Core.Gui.Window
 
         public virtual bool IsWindowValidInContext => true;
 
-        public static bool WorldRenderedNow => WorldRendererUtility.WorldRenderedNow;
+        public static bool WorldRenderedNow => WorldRendererUtility.WorldRendered;
 
         public override void Close(bool doCloseSound = true)
         {
@@ -64,7 +64,7 @@ namespace PrepareLanding.Core.Gui.Window
 
                 return;
             }
-            
+
             // defensive check, just to catch this abnormal state if code logic is very wrong
             if (Find.WindowStack.IsOpen(GetType())) //note: this.getType()
             {

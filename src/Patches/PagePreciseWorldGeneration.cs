@@ -27,19 +27,22 @@ namespace PrepareLanding.Patches
 
         private readonly OverallPopulation _population;
 
+        private readonly LandmarkDensity _landmarkDensity;
+
         private readonly List<FactionDef> _factions;
 
         private readonly float _pollution;
 
         public override string PageTitle => "Precise World Generation";
 
-        public PagePreciseWorldGeneration(float planetCoverage, string seedString, OverallRainfall rainFall, OverallTemperature temperature, OverallPopulation population, List<FactionDef> factions, float pollution)
+        public PagePreciseWorldGeneration(float planetCoverage, string seedString, OverallRainfall rainFall, OverallTemperature temperature, OverallPopulation population, LandmarkDensity landmarkDensity, List<FactionDef> factions, float pollution)
         {
             _planetCoverage = planetCoverage;
             _seedString = seedString;
             _rainfall = rainFall;
             _temperature = temperature;
             _population = population;
+            _landmarkDensity = landmarkDensity;
             _factions = factions;
             _pollution = pollution;
         }
@@ -157,7 +160,7 @@ namespace PrepareLanding.Patches
             LongEventHandler.QueueLongEvent(delegate
             {
                 Find.GameInitData.ResetWorldRelatedMapInitData();
-                Current.Game.World = WorldGenerator.GenerateWorld(_planetCoverage, _seedString, _rainfall, _temperature, _population, _factions, _pollution);
+                Current.Game.World = WorldGenerator.GenerateWorld(_planetCoverage, _seedString, _rainfall, _temperature, _population, _landmarkDensity, _factions, _pollution);
                 LongEventHandler.ExecuteWhenFinished(delegate
                 {
                     if (next != null)

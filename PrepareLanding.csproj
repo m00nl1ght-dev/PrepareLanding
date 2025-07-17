@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>output\PrepareLanding\1.5\Assemblies\</OutputPath>
+    <OutputPath>output\PrepareLanding\1.6\Assemblies\</OutputPath>
     <DefineConstants>TRACE;WORLD_DATA</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,31 +45,31 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>libs\1.5\Assembly-CSharp.dll</HintPath>
+      <HintPath>libs\1.6\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>libs\1.5\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>libs\1.6\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>libs\1.5\UnityEngine.dll</HintPath>
+      <HintPath>libs\1.6\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>libs\1.5\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>libs\1.6\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>libs\1.5\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>libs\1.6\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>libs\1.5\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>libs\1.6\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>libs\1.5\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>libs\1.6\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -156,8 +157,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug python $(ProjectDir)tools\pdb2mdb.py $(TargetPath)
-if $(ConfigurationName) == Debug python $(ProjectDir)tools\copy_to_rimworld.py $(TargetDir) K:\rimworld_debug\RimWorld_14 1.4 --output_dir $(ProjectDir)output\$(TargetName) --pdb --mdb</PostBuildEvent>
+    <PostBuildEvent>
+      rmdir /S /Q "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\PrepareLanding\"
+      xcopy /E /I /Y "..\..\" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\PrepareLanding\"
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

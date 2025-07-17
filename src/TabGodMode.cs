@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using PrepareLanding.Core.Extensions;
 using PrepareLanding.Core.Gui.Tab;
-using PrepareLanding.Filters;
 using PrepareLanding.GameData;
 using RimWorld;
 using RimWorld.Planet;
@@ -52,7 +51,7 @@ namespace PrepareLanding
         /// <summary>Gets whether the tab can be drawn or not.</summary>
         public override bool CanBeDrawn
         {
-            get { return Prefs.DevMode && DebugSettings.godMode && Current.ProgramState != ProgramState.Playing; }
+            get => Prefs.DevMode && DebugSettings.godMode && Current.ProgramState != ProgramState.Playing;
             set { }
         }
 
@@ -73,7 +72,7 @@ namespace PrepareLanding
         {
             Begin(inRect);
 
-            var tileId = Find.WorldSelector.selectedTile;
+            var tileId = Find.WorldSelector.SelectedTile;
             if (tileId == -1)
             {
                 NewColumn();
@@ -105,7 +104,7 @@ namespace PrepareLanding
         {
             DrawEntryHeader("Tile Setup", backgroundColor: ColorLibrary.RoyalPurple);
 
-            var tileId = Find.WorldSelector.selectedTile;
+            var tileId = Find.WorldSelector.SelectedTile;
 
             if (!Find.WorldSelector.AnyObjectOrTileSelected || tileId < 0)
             {
@@ -468,9 +467,8 @@ namespace PrepareLanding
                     ref tmpState))
                     _selectedStoneDef = currentOrderedStoneDef;
 
-                // if the state changed, update the item with the new state
-                if (tmpState != selectedStoneDefs[currentOrderedStoneDef])
-                    selectedStoneDefs[currentOrderedStoneDef] = tmpState;
+                // update the item with the new state
+                selectedStoneDefs[currentOrderedStoneDef] = tmpState;
 
                 ReorderableWidget.Reorderable(reorderableGroup, itemRect);
 

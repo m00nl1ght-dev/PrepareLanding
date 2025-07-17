@@ -84,13 +84,9 @@ namespace PrepareLanding
         // whether or not to save options with the preset
         private bool _saveOptions;
 
-        private Vector2 _scrollPosPresetDescription;
-
         private Vector2 _scrollPosPresetFiles;
 
         private Vector2 _scrollPosPresetFilterInfo;
-
-        private Vector2 _scrollPosPresetLoadDescription;
 
         private Vector2 _scrollPosPresetOptionInfo;
 

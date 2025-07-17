@@ -149,7 +149,7 @@ namespace PrepareLanding
                 }
             };
 
-            // gather filters by their "heaviness": light filters are filters that will probably be fast (light on CPU cycles) 
+            // gather filters by their "heaviness": light filters are filters that will probably be fast (light on CPU cycles)
             //  while heavy filters will probably take time and have a good chance of freezing the game because they take a lot
             //  of time and CPU power.
             var lightFilters = _allFilters.Values.Where(filter => filter.Heaviness == FilterHeaviness.Light).ToList();
@@ -218,7 +218,7 @@ namespace PrepareLanding
             if (_matchingTileIds.Count == 0)
             {
                 Messages.Message("PLFILT_FilterTilesFirst".Translate(), MessageTypeDefOf.RejectInput);
-                return Tile.Invalid;
+                return PlanetTile.Invalid;
             }
 
             var random = new System.Random();
@@ -236,13 +236,13 @@ namespace PrepareLanding
                         tile.hilliness == Hilliness.Impassable)
                         return 0f;
 
-                    if (!tile.biome.canBuildBase || !tile.biome.implemented)
+                    if (!tile.PrimaryBiome.canBuildBase || !tile.PrimaryBiome.implemented)
                         return 0f;
 
-                    if (!tile.biome.canAutoChoose)
+                    if (!tile.PrimaryBiome.canAutoChoose)
                         return 0f;
 
-                    return tile.biome.settlementSelectionWeight;
+                    return tile.PrimaryBiome.settlementSelectionWeight;
                 }, out var tileId))
                 {
                     if (TileFinder.IsValidTileForNewSettlement(tileId))
@@ -252,7 +252,7 @@ namespace PrepareLanding
 
             Messages.Message("PLFILT_FailedFindValidBaseTile".Translate(), MessageTypeDefOf.RejectInput);
             Log.Error("[PrepareLanding] Failed to find a valid tile for a base.");
-            return Tile.Invalid;
+            return PlanetTile.Invalid;
         }
 
         /// <summary>
@@ -309,11 +309,8 @@ namespace PrepareLanding
             FilterInfoLogger.AppendMessage(msgText);
 
             var usedFilters = 0;
-            for (var i = 0; i < _sortedFilters.Count; i++)
+            foreach (var filter in _sortedFilters)
             {
-                // get the filter
-                var filter = _sortedFilters[i];
-
                 // only use an active filter
                 if (!filter.IsFilterActive)
                     continue;
@@ -395,7 +392,7 @@ namespace PrepareLanding
             {
                 var msgAllFiltersRanIn = string.Format("PLFILT_AllFiltersRanIn".Translate(), usedFilters,
                     globalFilterStopWatch.Elapsed);
-                
+
                 FilterInfoLogger.AppendMessage(msgAllFiltersRanIn);
                 var msgTotalOfxTilesMatchAllFilters = string.Format("PLFILT_TotalOfxTilesMatchAllFilters".Translate(),
                     _matchingTileIds.Count);
@@ -415,7 +412,7 @@ namespace PrepareLanding
         /// </summary>
         private void Prefilter()
         {
-            Log.Message($"[PrepareLanding] Prefilter: {Find.WorldGrid.tiles.Count} tiles in WorldGrid.tiles");
+            Log.Message($"[PrepareLanding] Prefilter: {Find.WorldGrid.TilesCount} tiles in WorldGrid.tiles");
 
             FilterInfoLogger.AppendTitleMessage("PLFILT_PreFiltering".Translate(), textColor: Color.cyan);
 
@@ -435,7 +432,7 @@ namespace PrepareLanding
             }
 
             var msgTilesRemainAfterFilter = string.Format("PLFILT_ValidTilesRemainAfterFilter".Translate(),
-                _allValidTileIds.Count, Find.WorldGrid.tiles.Count - _allValidTileIds.Count);
+                _allValidTileIds.Count, Find.WorldGrid.TilesCount - _allValidTileIds.Count);
             FilterInfoLogger.AppendMessage(msgTilesRemainAfterFilter);
 
             // get all tiles with at least one river
@@ -620,7 +617,7 @@ namespace PrepareLanding
 
             // we must be able to build a base, the tile biome must be implemented and the tile itself must not be impassable
             // Side note on tile.WaterCovered: this doesn't work for sea ice biomes as elevation is < 0, but sea ice is a perfectly valid biome where to settle.
-            return tile.biome.canBuildBase && tile.biome.implemented && impassableTilesCondition;
+            return tile.PrimaryBiome.canBuildBase && tile.PrimaryBiome.implemented && impassableTilesCondition;
         }
 
         #endregion PREDICATES

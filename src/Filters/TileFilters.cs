@@ -32,13 +32,13 @@ namespace PrepareLanding.Filters
             var chosenBiome = UserData.ChosenBiome;
 
             foreach (var tileId in inputList)
-                if (Find.World.grid[tileId].biome == chosenBiome)
+                if (Find.World.grid[tileId].PrimaryBiome == chosenBiome)
                     _filteredTiles.Add(tileId);
         }
 
         public static int NumberOfTilesByBiome(BiomeDef biome, List<int> inputList)
         {
-            return inputList.Count(tileId => Find.World.grid[tileId].biome == biome);
+            return inputList.Count(tileId => Find.World.grid[tileId].PrimaryBiome == biome);
         }
 
         public static int NumberOfTilesByBiome(BiomeDef biome)
@@ -52,7 +52,7 @@ namespace PrepareLanding.Filters
 
             var maxTiles = Find.World.grid.TilesCount;
             for (var i = 0; i < maxTiles; i++)
-                if (Find.World.grid[i].biome == biomeDef)
+                if (Find.World.grid[i].PrimaryBiome == biomeDef)
                     outList.Add(i);
 
             return outList;
@@ -125,13 +125,16 @@ namespace PrepareLanding.Filters
 
         protected override bool TileHasDef(Tile tile)
         {
-            return TileHasRoad(tile);
+            return tile is SurfaceTile surfaceTile && TileHasRoad(surfaceTile);
         }
 
         protected override List<T> TileDefs<T>(Tile tile)
         {
+            if (tile is not SurfaceTile surfaceTile || !TileHasRoad(surfaceTile))
+                return null;
+
             var tileRoadDefs = TileHasDef(tile)
-                ? tile.Roads.Select(roadlink => roadlink.road as T).Distinct().ToList()
+                ? surfaceTile.Roads.Select(roadlink => roadlink.road as T).Distinct().ToList()
                 : null;
 
             return tileRoadDefs;
@@ -147,7 +150,7 @@ namespace PrepareLanding.Filters
             return inputList.Intersect(PrepareLanding.Instance.TileFilter.AllTilesWithRoad);
         }
 
-        public static bool TileHasRoad(Tile tile)
+        public static bool TileHasRoad(SurfaceTile tile)
         {
             return tile.Roads != null && tile.Roads.Count != 0;
         }
@@ -222,7 +225,7 @@ namespace PrepareLanding.Filters
                 return;
             }
 
-            // the game use 2 to 3 types of stone per tile, so we must have at least 2 chosen types of stones 
+            // the game use 2 to 3 types of stone per tile, so we must have at least 2 chosen types of stones
             if (orderedStoneDefsOnPartial.Count < 2)
             {
                 PrepareLanding.Instance.TileFilter.FilterInfoLogger.AppendErrorMessage(
@@ -266,7 +269,7 @@ namespace PrepareLanding.Filters
                         }
                     }
                     // maximum must-have stone types
-                    else if (orderedStoneDefsOnCount == 3)
+                    else
                     {
                         if (UserData.SelectedStoneDefs.OrderedFiltering)
                         {
@@ -281,6 +284,7 @@ namespace PrepareLanding.Filters
                                 _filteredTiles.Add(tileId);
                         }
                     }
+
                     continue;
                 }
 
@@ -310,7 +314,7 @@ namespace PrepareLanding.Filters
 
         public override string SubjectThingDef => "PLTILFILT_Rivers".Translate();
 
-        
+
         public override void Filter(List<int> inputList)
         {
             base.Filter(inputList);
@@ -333,18 +337,18 @@ namespace PrepareLanding.Filters
 
         protected override bool TileHasDef(Tile tile)
         {
-            return TileHasRiver(tile);
+            return tile is SurfaceTile surfaceTile && TileHasRiver(surfaceTile);
         }
 
         protected override List<T> TileDefs<T>(Tile tile)
         {
-            if (!TileHasRiver(tile))
+            if (tile is not SurfaceTile surfaceTile || !TileHasRiver(surfaceTile))
                 return null;
 
             // note: even though there are multiple rivers in a tile, only the one with the biggest degradeThreshold makes it to the playable map
-            var riverLink = tile.Rivers.MaxBy(riverlink => riverlink.river.degradeThreshold);
+            var riverLink = surfaceTile.Rivers.MaxBy(riverlink => riverlink.river.degradeThreshold);
 
-            return new List<T>{ riverLink.river as T };
+            return [riverLink.river as T];
         }
 
         public static IEnumerable<int> TilesWithRiver(IEnumerable<int> inputList)
@@ -352,7 +356,7 @@ namespace PrepareLanding.Filters
             return inputList.Intersect(PrepareLanding.Instance.TileFilter.AllTilesWithRiver);
         }
 
-        public static bool TileHasRiver(Tile tile)
+        public static bool TileHasRiver(SurfaceTile tile)
         {
             return tile.Rivers != null && tile.Rivers.Count != 0;
         }
@@ -403,13 +407,13 @@ namespace PrepareLanding.Filters
             foreach (var tileId in inputList)
             {
                 var tile = Find.WorldGrid[tileId];
-                if (tile.biome.foragedFood == null)
+                if (tile.PrimaryBiome.foragedFood == null)
                     continue;
 
                 //Log.Message($"[PL] Tile: {tileId}; forageability: {tile.biome.forageability}");
 
                 // forageability is a %age, so 25% is 0.25, we have to multiply by 100.
-                if (UserData.Forageability.InRange(tile.biome.forageability * 100f)) 
+                if (UserData.Forageability.InRange(tile.PrimaryBiome.forageability * 100f))
                     FilteredTiles.Add(tileId);
             }
         }
@@ -436,7 +440,7 @@ namespace PrepareLanding.Filters
             {
                 var tile = Find.WorldGrid[tileId];
 
-                if(tile.biome.foragedFood != null && tile.biome.foragedFood == UserData.ForagedFood)
+                if(tile.PrimaryBiome.foragedFood != null && tile.PrimaryBiome.foragedFood == UserData.ForagedFood)
                     FilteredTiles.Add(tileId);
             }
         }
@@ -501,9 +505,9 @@ namespace PrepareLanding.Filters
 
     public class TileFilterCoastalLakeTiles : TileFilter
     {
-        private static readonly List<Rot4> TmpLakeDirs = new List<Rot4>();
+        private static readonly List<Rot4> TmpLakeDirs = [];
 
-        private static readonly List<int> TmpNeighbors = new List<int>();
+        private static readonly List<PlanetTile> TmpNeighbors = [];
 
         public TileFilterCoastalLakeTiles(UserData userData, string attachedProperty,
             FilterHeaviness heaviness) : base(userData, attachedProperty, heaviness)
@@ -562,7 +566,7 @@ namespace PrepareLanding.Filters
         public static Rot4 CoastDirectionAt(int tileId)
         {
             var tile = Find.World.grid[tileId];
-            if (!tile.biome.canBuildBase)
+            if (!tile.PrimaryBiome.canBuildBase)
             {
                 return Rot4.Invalid;
             }
@@ -573,7 +577,7 @@ namespace PrepareLanding.Filters
             while (i < count)
             {
                 var tile2 = Find.World.grid[TmpNeighbors[i]];
-                if (tile2.biome == BiomeDefOf.Lake)
+                if (tile2.PrimaryBiome == BiomeDefOf.Lake)
                 {
                     var rotFromTo = Find.World.grid.GetRotFromTo(tileId, TmpNeighbors[i]);
                     if (!TmpLakeDirs.Contains(rotFromTo))
@@ -736,7 +740,7 @@ namespace PrepareLanding.Filters
                 // twelfthList is a list of Twelfth (where 1 twelfth is 5 days); the count of items indicates how much twelfths you can grow plants
                 //   from 0 (no growing period) to 12 (60 days -> year round).
                 var twelfthList = GenTemperature.TwelfthsInAverageTemperatureRange(tileId,
-                    Plant.MinOptimalGrowthTemperature, Plant.MaxOptimalGrowthTemperature);
+                    Plant.DefaultMinOptimalGrowthTemperature, Plant.DefaultMaxOptimalGrowthTemperature);
                 var tileGrowingDays = twelfthList.Count * GenDate.DaysPerTwelfth;
 
                 // GrowingPeriod.Min and GrowingPeriod.Max are only one twelfth,: it indicates *how many periods of 5 days* we must search for.
@@ -983,7 +987,7 @@ namespace PrepareLanding.Filters
 
             if (!IsFilterActive)
                 return;
-            
+
             foreach (var tileId in inputList)
             {
                 if(Find.World.CoastDirectionAt(tileId).AsInt == UserData.CoastalRotation.Selected)
