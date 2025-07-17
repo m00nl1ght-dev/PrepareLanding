@@ -256,7 +256,7 @@ namespace PrepareLanding.GameData
                 .ToList();
         }
 
-        private static readonly string[] ExcludedTileMutators = ["UndergroundCave"];
+        private static readonly string[] ExcludedTileMutators = ["UndergroundCave", "GL_RiverTerrain"];
 
         /// <summary>
         ///     Build the tile mutator definitions (<see cref="TileMutatorDef" />) list.
@@ -266,10 +266,22 @@ namespace PrepareLanding.GameData
         {
             return DefDatabase<TileMutatorDef>.AllDefs
                 .Where(d => !ExcludedTileMutators.Contains(d.defName))
-                .OrderBy(d => d.modContentPack.IsCoreMod ? 0 : d.modContentPack.IsOfficialMod ? 1 : 2)
+                .OrderBy(d => TileMutatorMcpSort(d.modContentPack))
                 .ThenBy(d => d.modContentPack.Name)
                 .ThenBy(d => d.label)
                 .ToList();
+        }
+
+        private static readonly string[] TileMutatorMcpOrder = [
+            "ludeon.rimworld",
+            "m00nl1ght.geologicallandforms",
+            "m00nl1ght.geologicallandforms.biometransitions"
+        ];
+
+        private static int TileMutatorMcpSort(ModContentPack mcp)
+        {
+            var idx = Array.IndexOf(TileMutatorMcpOrder, mcp.ModMetaData.PackageIdNonUnique);
+            return idx >= 0 ? idx : mcp.IsOfficialMod ? 99 : 999;
         }
 
         /// <summary>

@@ -13,11 +13,15 @@ namespace PrepareLanding
         private static Vector2 _scrollPosFeatureSelection = Vector2.zero;
         private static Vector2 _scrollPosAdjBiomeSelection = Vector2.zero;
 
+        private static int _featuresCountCache;
+
         private readonly GameData.GameData _gameData;
 
         public TabFeatures(GameData.GameData gameData, float columnSizePercent = 0.48f) : base(columnSizePercent)
         {
             _gameData = gameData;
+
+            _featuresCountCache = _gameData.UserData.SelectedTileMutatorDefs.Count;
         }
 
         public override bool CanBeDrawn { get; set; } = true;
@@ -76,9 +80,11 @@ namespace PrepareLanding
                 }
             }
 
-            var scrollViewHeight = container.Count * DefaultElementHeight;
+            var scrollViewHeight = _featuresCountCache * DefaultElementHeight;
             var inLs = ListingStandard.BeginScrollView(15 * DefaultElementHeight, scrollViewHeight,
                 ref _scrollPosFeatureSelection, DefaultScrollableViewShrinkWidth);
+
+            _featuresCountCache = 0;
 
             foreach (var def in defs)
             {
@@ -90,23 +96,25 @@ namespace PrepareLanding
 
                 var tmpState = threeStateItem.State;
 
-                var disabled = IsFeatureDisabled(def);
-                var itemRect = inLs.GetRect(DefaultElementHeight);
-                var label = def.SelectionLabel();
+                if (!IsFeatureDisabled(def))
+                {
+                    var itemRect = inLs.GetRect(DefaultElementHeight);
+                    var label = def.SelectionLabel();
 
-                if (disabled)
-                    label = $"<color=#666666>{label} (disabled)</color>";
+                    Widgets.CheckBoxLabeledMulti(itemRect, label, ref tmpState);
 
-                Widgets.CheckBoxLabeledMulti(itemRect, label, ref tmpState, disabled);
+                    if (!string.IsNullOrEmpty(def.description))
+                        TooltipHandler.TipRegion(itemRect, def.description);
 
-                if (disabled)
+                    _featuresCountCache++;
+                }
+                else
+                {
                     tmpState = MultiCheckboxState.Partial;
+                }
 
                 if (tmpState != threeStateItem.State)
                     threeStateItem.State = tmpState;
-
-                if (!string.IsNullOrEmpty(def.description))
-                    TooltipHandler.TipRegion(itemRect, def.description);
             }
 
             ListingStandard.EndScrollView(inLs);
