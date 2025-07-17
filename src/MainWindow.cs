@@ -58,7 +58,6 @@ namespace PrepareLanding
 #if TAB_OVERLAYS
             _tabGuiUtilities.Add(new TabOverlays(gameData, 0.50f));
 #endif
-            _tabGuiUtilities.Add(new TabGodMode(gameData, 0.30f));
 
             TabController.Clear();
             TabController.AddTabRange(_tabGuiUtilities);

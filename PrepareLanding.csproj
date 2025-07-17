@@ -115,7 +115,6 @@
     <Compile Include="src\GameData\DefData.cs" />
     <Compile Include="src\GameData\ElevationData.cs" />
     <Compile Include="src\GameData\GameData.cs" />
-    <Compile Include="src\GameData\GodModeData.cs" />
     <Compile Include="src\GameData\RainfallData.cs" />
     <Compile Include="src\GameData\UserData.cs" />
     <Compile Include="src\GameData\WorldData.cs" />
@@ -131,7 +130,6 @@
     <Compile Include="src\Patches\PatchGameFinalizeInit.cs" />
     <Compile Include="src\Patches\PatchGenerateGridIntoWorld.cs" />
     <Compile Include="src\Patches\PatchGenerateWorld.cs" />
-    <Compile Include="src\Patches\PatchNaturalRockTypesIn.cs" />
     <Compile Include="src\Patches\PatchWorldInterface.cs" />
     <Compile Include="src\Patches\PatchWorldUpdate.cs" />
     <Compile Include="src\PrepareLanding.cs" />
@@ -142,7 +140,6 @@
     <Compile Include="src\RimWorldEventHandler.cs" />
     <Compile Include="src\StaticInitializer.cs" />
     <Compile Include="src\TabFilteredTiles.cs" />
-    <Compile Include="src\TabGodMode.cs" />
     <Compile Include="src\TabInfo.cs" />
     <Compile Include="src\TabLoadSave.cs" />
     <Compile Include="src\TabOptions.cs" />
