@@ -64,6 +64,8 @@ namespace PrepareLanding.Presets
                     _gameData.UserData.StoneTypesNumber = stoneTypesNumber;
                 }
             }
+            LoadThreeStateItemContainer(xTerrain, "Features", "Feature", _gameData.UserData.SelectedTileMutatorDefs);
+            LoadThreeStateItemContainer(xTerrain, "AdjBiomes", "Biome", _gameData.UserData.SelectedAdjBiomeDefs);
             _gameData.UserData.ChosenCoastalTileState = LoadThreeState(xTerrain, "CoastalTile");
             _gameData.UserData.ChosenCoastalLakeTileState = LoadThreeState(xTerrain, "CoastalLakeTile");
             LoadUsableFromList(xTerrain, "CoastalRotation", _gameData.UserData.CoastalRotation);
@@ -158,6 +160,8 @@ namespace PrepareLanding.Presets
                     SaveThreeStateItemContainerOrdered(xTerrainFilters, "Stones", "Stone",
                         _gameData.UserData.SelectedStoneDefs);
                 }
+                SaveThreeStateItemContainer(xTerrainFilters, "Features", "Feature", _gameData.UserData.SelectedTileMutatorDefs);
+                SaveThreeStateItemContainer(xTerrainFilters, "AdjBiomes", "Biome", _gameData.UserData.SelectedAdjBiomeDefs);
                 SaveThreeState(xTerrainFilters, "CoastalTile", _gameData.UserData.ChosenCoastalTileState);
                 SaveThreeState(xTerrainFilters, "CoastalLakeTile", _gameData.UserData.ChosenCoastalLakeTileState);
                 SaveUsableFromList(xTerrainFilters, "CoastalRotation", _gameData.UserData.CoastalRotation);
@@ -261,7 +265,7 @@ namespace PrepareLanding.Presets
 
         private const string SelectedNode = "Selected";
 
-        // most/least 
+        // most/least
         private const string MostLeastItemFeatureNode = "Feature";
 
         private const string MostLeastItemFeatureTypeNode = "FeatureType";

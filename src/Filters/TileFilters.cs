@@ -123,19 +123,12 @@ namespace PrepareLanding.Filters
             }
         }
 
-        protected override bool TileHasDef(Tile tile)
-        {
-            return tile is SurfaceTile surfaceTile && TileHasRoad(surfaceTile);
-        }
-
-        protected override List<T> TileDefs<T>(Tile tile)
+        protected override IList<T> TileDefs<T>(Tile tile)
         {
             if (tile is not SurfaceTile surfaceTile || !TileHasRoad(surfaceTile))
                 return null;
 
-            var tileRoadDefs = TileHasDef(tile)
-                ? surfaceTile.Roads.Select(roadlink => roadlink.road as T).Distinct().ToList()
-                : null;
+            var tileRoadDefs = surfaceTile.Roads.Select(link => link.road as T).Distinct().ToList();
 
             return tileRoadDefs;
         }
@@ -335,18 +328,13 @@ namespace PrepareLanding.Filters
             }
         }
 
-        protected override bool TileHasDef(Tile tile)
-        {
-            return tile is SurfaceTile surfaceTile && TileHasRiver(surfaceTile);
-        }
-
-        protected override List<T> TileDefs<T>(Tile tile)
+        protected override IList<T> TileDefs<T>(Tile tile)
         {
             if (tile is not SurfaceTile surfaceTile || !TileHasRiver(surfaceTile))
                 return null;
 
             // note: even though there are multiple rivers in a tile, only the one with the biggest degradeThreshold makes it to the playable map
-            var riverLink = surfaceTile.Rivers.MaxBy(riverlink => riverlink.river.degradeThreshold);
+            var riverLink = surfaceTile.Rivers.MaxBy(link => link.river.degradeThreshold);
 
             return [riverLink.river as T];
         }
@@ -993,6 +981,109 @@ namespace PrepareLanding.Filters
                 if(Find.World.CoastDirectionAt(tileId).AsInt == UserData.CoastalRotation.Selected)
                     _filteredTiles.Add(tileId);
             }
+        }
+    }
+
+    public class TileFilterFeatures : TileFilter
+    {
+        public TileFilterFeatures(UserData userData, string attachedProperty, FilterHeaviness heaviness) :
+            base(userData, attachedProperty, heaviness) {}
+
+        public override bool IsFilterActive
+        {
+            get
+            {
+                var tileMutatorDefs = UserData.SelectedTileMutatorDefs;
+                return tileMutatorDefs.Any(entry => entry.Value.State != MultiCheckboxState.Partial);
+            }
+        }
+
+        public override string SubjectThingDef => "PLTILFILT_Features".Translate();
+
+        public override void Filter(List<int> inputList)
+        {
+            base.Filter(inputList);
+
+            if (!IsFilterActive)
+                return;
+
+            switch (UserData.SelectedTileMutatorDefs.FilterBooleanState)
+            {
+                case FilterBoolean.OrFiltering:
+                    FilterOr(inputList, UserData.SelectedTileMutatorDefs);
+                    break;
+                case FilterBoolean.AndFiltering:
+                    FilterAnd(inputList, UserData.SelectedTileMutatorDefs, UserData.SelectedTileMutatorDefs.OffPartialNoSelect);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        protected override IList<T> TileDefs<T>(Tile tile)
+        {
+            return (IList<T>) tile.Mutators;
+        }
+    }
+
+    public class TileFilterAdjBiomes : TileFilter
+    {
+        private static readonly List<PlanetTile> TmpNeighbors = [];
+
+        public TileFilterAdjBiomes(UserData userData, string attachedProperty, FilterHeaviness heaviness) :
+            base(userData, attachedProperty, heaviness) {}
+
+        public override bool IsFilterActive
+        {
+            get
+            {
+                var biomeDefs = UserData.SelectedAdjBiomeDefs;
+                return biomeDefs.Any(entry => entry.Value.State != MultiCheckboxState.Partial);
+            }
+        }
+
+        public override string SubjectThingDef => "PLTILFILT_AdjBiomes".Translate();
+
+        public override void Filter(List<int> inputList)
+        {
+            base.Filter(inputList);
+
+            if (!IsFilterActive)
+                return;
+
+            switch (UserData.SelectedAdjBiomeDefs.FilterBooleanState)
+            {
+                case FilterBoolean.OrFiltering:
+                    FilterOr(inputList, UserData.SelectedAdjBiomeDefs);
+                    break;
+                case FilterBoolean.AndFiltering:
+                    FilterAnd(inputList, UserData.SelectedAdjBiomeDefs, UserData.SelectedAdjBiomeDefs.OffPartialNoSelect);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        protected override IList<T> TileDefs<T>(Tile tile)
+        {
+            var worldGrid = Find.World.grid;
+
+            worldGrid.GetTileNeighbors(tile.tile, TmpNeighbors);
+
+            List<BiomeDef> adjBiomes = null;
+
+            foreach (var nb in TmpNeighbors)
+            {
+                var adjBiome = worldGrid[nb].PrimaryBiome;
+                if (adjBiome != tile.PrimaryBiome)
+                {
+                    adjBiomes ??= [];
+                    adjBiomes.AddUnique(adjBiome);
+                }
+            }
+
+            IList<BiomeDef> biomeDefs = adjBiomes != null ? adjBiomes : Array.Empty<BiomeDef>();
+            return (IList<T>) biomeDefs;
         }
     }
 }

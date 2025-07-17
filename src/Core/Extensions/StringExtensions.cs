@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Verse;
 
 namespace PrepareLanding.Core.Extensions
 {
@@ -13,6 +14,11 @@ namespace PrepareLanding.Core.Extensions
         public static string Repeat(this string s, int n)
         {
             return new string(Enumerable.Range(0, n).SelectMany(x => s).ToArray());
+        }
+
+        public static string SelectionLabel(this Def def)
+        {
+            return $"<color=#999999>({def.modContentPack.Name.CapitalizeFirst()})</color> {def.LabelCap}";
         }
     }
 }

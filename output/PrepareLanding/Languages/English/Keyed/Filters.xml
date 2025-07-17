@@ -29,5 +29,7 @@
     <PLTILFILT_RequestingMoreTilesThanAvailable>You are requesting more tiles than the number of available tiles (max:</PLTILFILT_RequestingMoreTilesThanAvailable>  <!-- followed by a number -->
     <PLTILFILT_WorldFeatures>World Features</PLTILFILT_WorldFeatures> <!-- these are the named locations on the world map -->
     <PLTILFILT_CoastalRotation>Coastal Rotation</PLTILFILT_CoastalRotation>
+    <PLTILFILT_Features>Map Features</PLTILFILT_Features>
+    <PLTILFILT_AdjBiomes>Adjacent Biomes</PLTILFILT_AdjBiomes>
 
 </LanguageData>

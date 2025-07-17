@@ -13,7 +13,7 @@ namespace PrepareLanding.Core.Gui.Tab
         public const float DefaultElementHeight = 30f;
         public const float DefaultGapLineHeight = 6f;
         public const float DefaultGapHeight = 12f;
-        public const float DefaultScrollableViewShrinkWidth = 16f;
+        public const float DefaultScrollableViewShrinkWidth = 20f;
 
         public static Color DefaultMenuSectionBgFillColor = Color.magenta;
 

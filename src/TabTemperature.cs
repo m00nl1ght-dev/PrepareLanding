@@ -46,7 +46,7 @@ namespace PrepareLanding
         /// <summary>
         ///     The name of the tab (that is actually displayed at its top).
         /// </summary>
-        public override string Name => "PLMWT2T_TabName".Translate();
+        public override string Name => "PLMWT2T_TabName_1_6".Translate();
 
         /// <summary>
         ///     Draw the actual content of this window.
@@ -56,7 +56,7 @@ namespace PrepareLanding
         {
             Begin(inRect);
             DrawMostLeastCharacteristicSelection();
-            DrawCaveSelection();
+            // DrawCaveSelection();
             DrawFeatureSelection();
             DrawOpenCoordinatesWindow();
             NewColumn(true);

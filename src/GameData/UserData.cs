@@ -200,6 +200,16 @@ namespace PrepareLanding.GameData
         public ThreeStateItemContainerOrdered<ThingDef> SelectedStoneDefs { get; } = new ThreeStateItemContainerOrdered<ThingDef>();
 
         /// <summary>
+        ///     Current user choices for the features filtering.
+        /// </summary>
+        public ThreeStateItemContainer<TileMutatorDef> SelectedTileMutatorDefs { get; } = new ThreeStateItemContainer<TileMutatorDef>();
+
+        /// <summary>
+        ///     Current user choices for adjacent biomes filtering.
+        /// </summary>
+        public ThreeStateItemContainer<BiomeDef> SelectedAdjBiomeDefs { get; } = new ThreeStateItemContainer<BiomeDef>();
+
+        /// <summary>
         ///     The number of stones per tile to filter when the <see cref="StoneTypesNumberOnly" /> boolean is true.
         /// </summary>
         public int StoneTypesNumber
@@ -302,6 +312,12 @@ namespace PrepareLanding.GameData
             if (!SelectedStoneDefs.IsInDefaultState())
                 return false;
 
+            if (!SelectedTileMutatorDefs.IsInDefaultState())
+                return false;
+
+            if (!SelectedAdjBiomeDefs.IsInDefaultState())
+                return false;
+
             if (_stoneTypesNumberOnly)
                 return false;
 
@@ -368,6 +384,8 @@ namespace PrepareLanding.GameData
             SelectedRoadDefs.SetContainer(defProps.RoadDefs, nameof(SelectedRoadDefs));
             SelectedRiverDefs.SetContainer(defProps.RiverDefs, nameof(SelectedRiverDefs));
             SelectedStoneDefs.SetContainer(defProps.StoneDefs, nameof(SelectedStoneDefs));
+            SelectedTileMutatorDefs.SetContainer(defProps.TileMutatorDefs, nameof(SelectedTileMutatorDefs));
+            SelectedAdjBiomeDefs.SetContainer(defProps.BiomeDefs, nameof(SelectedAdjBiomeDefs));
 
             // stone numbers
             StoneTypesNumberOnly = false;

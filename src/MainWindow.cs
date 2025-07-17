@@ -50,6 +50,7 @@ namespace PrepareLanding
 
             _tabGuiUtilities.Clear();
             _tabGuiUtilities.Add(new TabTerrain(gameData, 0.30f));
+            _tabGuiUtilities.Add(new TabFeatures(gameData, 0.48f));
             _tabGuiUtilities.Add(new TabTemperature(gameData, 0.30f));
             _tabGuiUtilities.Add(_tabFilteredTiles);
             _tabGuiUtilities.Add(new TabInfo(gameData, 0.48f));

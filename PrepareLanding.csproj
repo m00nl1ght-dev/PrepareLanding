@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>output\PrepareLanding\1.6\Assemblies\</OutputPath>
     <DefineConstants>TRACE;WORLD_DATA</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -139,6 +139,7 @@
     <Compile Include="src\Presets\PresetManager.cs" />
     <Compile Include="src\RimWorldEventHandler.cs" />
     <Compile Include="src\StaticInitializer.cs" />
+    <Compile Include="src\TabFeatures.cs" />
     <Compile Include="src\TabFilteredTiles.cs" />
     <Compile Include="src\TabInfo.cs" />
     <Compile Include="src\TabLoadSave.cs" />

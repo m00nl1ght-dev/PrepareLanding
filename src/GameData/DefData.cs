@@ -37,6 +37,11 @@ namespace PrepareLanding.GameData
         private List<ThingDef> _stoneDefs;
 
         /// <summary>
+        ///     All tile mutator definitions (<see cref="TileMutatorDef" />) from RimWorld.
+        /// </summary>
+        private List<TileMutatorDef> _tileMutatorDefs;
+
+        /// <summary>
         ///     List of all RimWorld hillinesses.
         /// </summary>
         private List<Hilliness> _hillinesses;
@@ -86,6 +91,11 @@ namespace PrepareLanding.GameData
         public ReadOnlyCollection<RoadDef> RoadDefs => _roadDefs.AsReadOnly();
 
         /// <summary>
+        ///     All tile mutator definitions (<see cref="TileMutatorDef" />) from RimWorld.
+        /// </summary>
+        public ReadOnlyCollection<TileMutatorDef> TileMutatorDefs => _tileMutatorDefs.AsReadOnly();
+
+        /// <summary>
         ///     All known hilliness (<see cref="Hilliness" />) from RimWorld.
         /// </summary>
         public ReadOnlyCollection<Hilliness> HillinessCollection => _hillinesses.AsReadOnly();
@@ -110,6 +120,9 @@ namespace PrepareLanding.GameData
             // stone definitions list
             _stoneDefs = BuildStoneDefs();
 
+            // stone definitions list
+            _tileMutatorDefs = BuildTileMutatorDefs();
+
             // build hilliness values
             _hillinesses = BuildHillinessValues();
 
@@ -128,6 +141,9 @@ namespace PrepareLanding.GameData
             var biomeDefsList = new List<BiomeDef>();
             foreach (var biomeDef in DefDatabase<BiomeDef>.AllDefsListForReading)
             {
+                if (!biomeDef.generatesNaturally)
+                    continue;
+
                 BiomeDef currentBiomeDef = null;
 
                 if (biomeDef.implemented)
@@ -145,7 +161,7 @@ namespace PrepareLanding.GameData
                     if (!biomeDefsList.Contains(biomeDef))
                         currentBiomeDef = biomeDef;
                 }
-                else if (!allowCantBuildBase)
+                else
                 {
                     if (biomeDefsList.Contains(biomeDef))
                         biomeDefsList.Remove(biomeDef);
@@ -157,7 +173,11 @@ namespace PrepareLanding.GameData
                     biomeDefsList.Add(currentBiomeDef);
             }
 
-            return biomeDefsList.OrderBy(biome => biome.LabelCap.Resolve()).ToList();
+            return biomeDefsList
+                .OrderBy(d => d.modContentPack.IsCoreMod ? 0 : d.modContentPack.IsOfficialMod ? 1 : 2)
+                .ThenBy(d => d.modContentPack.Name)
+                .ThenBy(d => d.label)
+                .ToList();
         }
 
         /// <summary>
@@ -228,7 +248,28 @@ namespace PrepareLanding.GameData
         /// <returns>A list of all available RimWorld stone definitions (<see cref="ThingDef" />).</returns>
         private List<ThingDef> BuildStoneDefs()
         {
-            return DefDatabase<ThingDef>.AllDefs.Where(WorldTileFilter.IsThingDefStone).ToList();
+            return DefDatabase<ThingDef>.AllDefs
+                .Where(WorldTileFilter.IsThingDefStone)
+                .OrderBy(d => d.modContentPack.IsCoreMod ? 0 : d.modContentPack.IsOfficialMod ? 1 : 2)
+                .ThenBy(d => d.modContentPack.Name)
+                .ThenBy(d => d.label)
+                .ToList();
+        }
+
+        private static readonly string[] ExcludedTileMutators = ["UndergroundCave"];
+
+        /// <summary>
+        ///     Build the tile mutator definitions (<see cref="TileMutatorDef" />) list.
+        /// </summary>
+        /// <returns>A list of all available RimWorld tile mutator definitions (<see cref="TileMutatorDef" />).</returns>
+        private List<TileMutatorDef> BuildTileMutatorDefs()
+        {
+            return DefDatabase<TileMutatorDef>.AllDefs
+                .Where(d => !ExcludedTileMutators.Contains(d.defName))
+                .OrderBy(d => d.modContentPack.IsCoreMod ? 0 : d.modContentPack.IsOfficialMod ? 1 : 2)
+                .ThenBy(d => d.modContentPack.Name)
+                .ThenBy(d => d.label)
+                .ToList();
         }
 
         /// <summary>

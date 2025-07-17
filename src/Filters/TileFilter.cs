@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PrepareLanding.Core.Extensions;
 using PrepareLanding.GameData;
-using RimWorld;
 using RimWorld.Planet;
-using UnityEngine;
 using Verse;
 
 namespace PrepareLanding.Filters
@@ -43,12 +41,7 @@ namespace PrepareLanding.Filters
             _filteredTiles.Clear();
         }
 
-        protected virtual bool TileHasDef(Tile tile)
-        {
-            throw new NotImplementedException(); 
-        }
-
-        protected virtual List<T> TileDefs<T>(Tile tile) where T: Def
+        protected virtual IList<T> TileDefs<T>(Tile tile) where T: Def
         {
             throw new NotImplementedException();
         }
@@ -73,12 +66,11 @@ namespace PrepareLanding.Filters
             // foreach each tile in the input list
             foreach (var tileId in inputList)
             {
-                // get the tile and check if it has any of the Def type
                 var tile = Find.World.grid[tileId];
-                var tileHasDefs = TileHasDef(tile);
 
                 // get the Defs in the tile (or an empty list if no Defs)
                 var tileDefs = TileDefs<T>(tile);
+                var tileHasDefs = tileDefs.Count > 0;
 
                 if (tileHasDefs)
                 {
@@ -126,14 +118,13 @@ namespace PrepareLanding.Filters
             // foreach each tile in the input list
             foreach (var tileId in inputList)
             {
-                // get the tile and check if it has any road
                 var tile = Find.World.grid[tileId];
-                var tileHasDef = TileHasDef(tile);
 
                 // get the Defs in the tile (or an empty list if no Defs)
                 var tileDefs = TileDefs<T>(tile);
+                var tileHasDef = tileDefs.Count > 0;
 
-                // loop through user selection items (key value pair) : 
+                // loop through user selection items (key value pair) :
                 //    - key -> current item road def
                 //    - value -> user choice state: either ON / OFF / PARTIAL
                 foreach (var threeStateItemKvp in container)

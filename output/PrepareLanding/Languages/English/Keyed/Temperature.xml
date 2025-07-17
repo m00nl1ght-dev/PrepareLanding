@@ -5,6 +5,7 @@
 
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Terrain II & Temperature Tab [T2T] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <PLMWT2T_TabName>Terrain II &amp; Temp.</PLMWT2T_TabName> <!-- Terrain 2 and Temperature -->
+    <PLMWT2T_TabName_1_6>Climate</PLMWT2T_TabName_1_6> <!-- Terrain 2 and Temperature -->
 
         <!-- side note to translators: a "world feature" is a named location on the world map; that's the name used in RimWorld code -->
     <PLMWT2T_WorldFeature>World Feature</PLMWT2T_WorldFeature>

@@ -113,7 +113,7 @@ namespace PrepareLanding
                     };
 
                     //create the floating menu
-                    menuOption = new FloatMenuOption(currentBiomeDef.LabelCap, actionClick, MenuOptionPriority.Default,
+                    menuOption = new FloatMenuOption(currentBiomeDef.SelectionLabel(), actionClick, MenuOptionPriority.Default,
                         mouseOverAction);
                     // add it to the list of floating menu options
                     floatMenuOptions.Add(menuOption);
@@ -128,7 +128,7 @@ namespace PrepareLanding
 
             var currHeightBefore = ListingStandard.CurHeight;
 
-            var rightLabel = _gameData.UserData.ChosenBiome != null ? _gameData.UserData.ChosenBiome.LabelCap : "PLMW_SelectAny".Translate();
+            var rightLabel = _gameData.UserData.ChosenBiome?.LabelCap ?? "PLMW_SelectAny".Translate();
             ListingStandard.LabelDouble($"{"Biome".Translate()}:", rightLabel);
 
             var currHeightAfter = ListingStandard.CurHeight;

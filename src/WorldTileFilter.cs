@@ -146,6 +146,14 @@ namespace PrepareLanding
                 {
                     nameof(_userData.WorldFeature),
                     new TileFilterWorldFeature(_userData, nameof(_userData.WorldFeature), FilterHeaviness.Medium)
+                },
+                {
+                    nameof(_userData.SelectedTileMutatorDefs),
+                    new TileFilterFeatures(_userData, nameof(_userData.SelectedTileMutatorDefs), FilterHeaviness.Medium)
+                },
+                {
+                    nameof(_userData.SelectedAdjBiomeDefs),
+                    new TileFilterAdjBiomes(_userData, nameof(_userData.SelectedAdjBiomeDefs), FilterHeaviness.Heavy)
                 }
             };
 

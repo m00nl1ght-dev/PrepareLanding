@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <!-- Use 4 spaces indentation, NOT tabs -->
+    <!-- Overall prefix for the mod is "PL" for PrepareLanding; "MW" for Main Window -->
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Terrain Tab [TT] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <PLMWTF_TabName>Features</PLMWTF_TabName>
+
+    <PLMWTF_Features>Map Features</PLMWTF_Features>
+    <PLMWTF_AdjBiomes>Adjacent Biomes</PLMWTF_AdjBiomes>
+
+</LanguageData>
