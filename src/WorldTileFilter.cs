@@ -509,9 +509,9 @@ namespace PrepareLanding
                 return false;
             }
 
-            // advise user that filtering all tiles without preselected biomes or hilliness is not advised (with a world coverage >= 50%)
+            // advise user that filtering all tiles without preselected biomes or hilliness is not advised (with a world coverage > 50%)
             //  as it takes too much times with some filter, so it would be better to narrow down the filtering.
-            if (Find.World.info.planetCoverage >= 0.5f)
+            if (Find.World.info.planetCoverage > 0.5f)
                 if (!_userData.Options.DisablePreFilterCheck)
                     if (_userData.ChosenBiome == null || _userData.ChosenHilliness == Hilliness.Undefined)
                     {
