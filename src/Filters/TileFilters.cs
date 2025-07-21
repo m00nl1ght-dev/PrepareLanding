@@ -126,7 +126,7 @@ namespace PrepareLanding.Filters
         protected override IList<T> TileDefs<T>(Tile tile)
         {
             if (tile is not SurfaceTile surfaceTile || !TileHasRoad(surfaceTile))
-                return null;
+                return Array.Empty<T>();
 
             var tileRoadDefs = surfaceTile.Roads.Select(link => link.road as T).Distinct().ToList();
 
@@ -331,7 +331,7 @@ namespace PrepareLanding.Filters
         protected override IList<T> TileDefs<T>(Tile tile)
         {
             if (tile is not SurfaceTile surfaceTile || !TileHasRiver(surfaceTile))
-                return null;
+                return Array.Empty<T>();
 
             // note: even though there are multiple rivers in a tile, only the one with the biggest degradeThreshold makes it to the playable map
             var riverLink = surfaceTile.Rivers.MaxBy(link => link.river.degradeThreshold);
